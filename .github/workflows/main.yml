@@ -38,6 +38,7 @@ jobs:
 
       - name: Link Human to Agent
         working-directory: scripts
-        run: >-
-          node manualLinkHumanToAgent.js
-          --challenge '{"name":"${{ inputs.agent_name }}","description":"${{ inputs.agent_description }}"}'
+        env:
+          AGENT_NAME: ${{ inputs.agent_name }}
+          AGENT_DESCRIPTION: ${{ inputs.agent_description }}
+        run: node manualLinkHumanToAgent.js
