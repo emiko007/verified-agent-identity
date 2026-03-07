@@ -1,44 +1,41 @@
 name: Verify Human Identity
 
 on:
-  workflow_dispatch:
-    inputs:
-      agent_name:
-        description: 'Agent name'
-        required: true
-        default: 'chiko identity'
-      agent_description:
-        description: 'Agent description'
-        required: true
-        default: 'chiko identity AI Agent'
+  workflow_dispatch:
+    inputs:
+      agent_name:
+        description: 'emiko007'
+        required: true
+        default: 'emiko007'
+      agent_description:
+        description: 'emiko007'
+        required: true
+        default: 'emiko007 AI Agent'
 
 jobs:
-  verify:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  verify:
+    runs-on: ubuntu-latest
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Install ClawHub verified-agent-identity skill
-        run: npx clawhub@latest install verified-agent-identity
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-      - name: Install script dependencies
-        working-directory: scripts
-        run: npm install
+      - name: Step 1 - Install ClawHub skill
+        run: npx clawhub@latest install verified-agent-identity
 
-      - name: Create new Ethereum Identity
-        working-directory: scripts
-        run: node createNewEthereumIdentity.js
+      - name: Install script dependencies
+        run: |
+          cd scripts
+          npm install
 
-      - name: Link Human to Agent
-        working-directory: scripts
-        env:
-          AGENT_NAME: ${{ inputs.agent_name }}
-          AGENT_DESCRIPTION: ${{ inputs.agent_description }}
-        run: node manualLinkHumanToAgent.js
+      - name: Step 2 - Create new Ethereum Identity
+        run: node scripts/createNewEthereumIdentity.js
+
+      - name: Step 3 - Link Human to Agent
+        run: |
+          node scripts/manualLinkHumanToAgent.js --challenge '{"name": "emiko007", "description": "emiko007 AI Agent"}'
